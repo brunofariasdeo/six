@@ -1,23 +1,21 @@
-import logo from './logo.svg';
-import './App.css';
+import Letter from "./components/Letter/Letter";
+import "./app.scss";
 
 function App() {
+  const word = "abismo";
+  const guess = "ambito";
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="word-container">
+      {guess.split("").map((letter, index) => {
+        if (letter === word[index]) {
+          return <Letter letter={letter} position="correct" />;
+        } else if (letter !== word[index] && word.indexOf(letter) !== -1) {
+          return <Letter letter={letter} position="almost" />;
+        } else {
+          return <Letter letter={letter} position="incorrect" />;
+        }
+      })}
     </div>
   );
 }

@@ -1,0 +1,25 @@
+.letter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: white;
+  font-size: 35px;
+  text-transform: uppercase;
+
+  border-radius: 5px;
+  height: 76px;
+  width: 76px;
+}
+
+.correct {
+  background-color: #66a060;
+}
+
+.almost {
+  background-color: #ceb02c;
+}
+
+.incorrect {
+  background-color: #939b9f;
+}
