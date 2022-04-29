@@ -1,22 +1,33 @@
-import Letter from "./components/Letter/Letter";
-import "./app.scss";
+import { FormControl, Grid } from "@material-ui/core";
+import Word from "./components/Word";
+import styles from "./App.module.scss";
 
-function App() {
-  const word = "abismo";
-  const guess = "ambito";
-
+const App = () => {
   return (
-    <div className="word-container">
-      {guess.split("").map((letter, index) => {
-        if (letter === word[index]) {
-          return <Letter letter={letter} position="correct" />;
-        } else if (letter !== word[index] && word.indexOf(letter) !== -1) {
-          return <Letter letter={letter} position="almost" />;
-        } else {
-          return <Letter letter={letter} position="incorrect" />;
-        }
-      })}
-    </div>
+    <Grid
+      alignItems="center"
+      classes={{
+        root: styles.container
+      }}
+      container
+      direction="column"
+      justifyContent="center"
+    >
+      {/* {
+        [...Array(6)].map((_, index) =>  */}
+          <FormControl
+            classes={{
+              root:styles.container
+            }}
+            disabled
+          >
+            <Word
+              // key={index}
+            />
+          </FormControl>
+        {/* )
+      } */}
+    </Grid>
   );
 }
 

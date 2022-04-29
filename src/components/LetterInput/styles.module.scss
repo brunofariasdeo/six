@@ -1,0 +1,17 @@
+.letter {
+  background-color: #939B9F;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 76px;
+  height: 76px;
+
+  input {
+    caret-color: transparent;
+    color: white;
+    font-size: 35px;
+    text-align: center;
+    text-transform: uppercase;
+  }
+}
