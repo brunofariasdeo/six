@@ -8,7 +8,6 @@ const App = () => {
 
   const onGuessSubmit = () => {
     setCurrentGuessIndex(currentGuessIndex + 1);
-    console.log("onGuessTriggered", currentGuessIndex);
   };
 
   return (

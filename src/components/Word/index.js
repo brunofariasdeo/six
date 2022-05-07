@@ -1,5 +1,5 @@
-import { Button, Grid } from "@material-ui/core";
-import { useState } from "react";
+import { Grid } from "@material-ui/core";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import LetterInput from "../LetterInput";
 import styles from "./styles.module.scss";
@@ -16,10 +16,34 @@ const NUMBER_TO_POSITION = {
 const Word = ({ isCurrentGuess, onGuessSubmit }) => {
   const { register, handleSubmit } = useForm();
 
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [letters, setLetters] = useState({});
   const [isSubmitted, setIsSubmmited] = useState(false);
+  const lettersRef = useRef([]);
 
   const word = "abismo";
+
+  const checkPosition = (index) => {
+    if (isSubmitted) {
+      return letters[NUMBER_TO_POSITION[index + 1]]["position"];
+    } else {
+      if (!isCurrentGuess) {
+        return "disabled";
+      }
+    }
+  };
+
+  const handleFocusChange = (element, index) => {
+    lettersRef.current[index] = element;
+  };
+
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      handleSubmit(onSubmit)();
+    } else {
+      setCurrentIndex(currentIndex + 1);
+    }
+  };
 
   const onSubmit = (data) => {
     const keys = Object.keys(data);
@@ -39,6 +63,12 @@ const Word = ({ isCurrentGuess, onGuessSubmit }) => {
     onGuessSubmit();
   };
 
+  useEffect(() => {
+    setTimeout(() => {
+      lettersRef.current[currentIndex].querySelector("input").focus();
+    }, 10);
+  }, [currentIndex]);
+
   return (
     <Grid
       alignItems="center"
@@ -53,18 +83,12 @@ const Word = ({ isCurrentGuess, onGuessSubmit }) => {
         {[...Array(6)].map((_, index) => (
           <LetterInput
             disabled={!isCurrentGuess || isSubmitted}
+            handleFocusChange={handleFocusChange}
             id={NUMBER_TO_POSITION[index + 1]}
-            key={index}
-            onKeyPress={(event) =>
-              event.key === "Enter" && handleSubmit(onSubmit)()
-            }
-            position={
-              isSubmitted
-                ? letters[NUMBER_TO_POSITION[index + 1]]["position"]
-                : isCurrentGuess
-                ? ""
-                : "disabled"
-            }
+            index={index}
+            key={NUMBER_TO_POSITION[index + 1]}
+            onKeyPress={(event) => handleKeyPress(event, index)}
+            position={checkPosition(index)}
             {...register(NUMBER_TO_POSITION[index + 1])}
           />
         ))}

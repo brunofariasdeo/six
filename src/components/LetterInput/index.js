@@ -9,19 +9,25 @@ const POSITION_TO_STYLE = {
   notFound: styles.notFound,
 };
 
-const LetterInput = forwardRef(({ disabled, id, position, ...props }, ref) => {
-  return (
-    <TextField
-      className={POSITION_TO_STYLE[position]}
-      classes={{ root: styles.letter }}
-      disabled={disabled}
-      id={id}
-      inputProps={{ maxLength: 1 }}
-      InputProps={{ disableUnderline: true }}
-      ref={ref}
-      {...props}
-    />
-  );
-});
+const LetterInput = forwardRef(
+  (
+    { disabled, handleFocusChange, id, index, onChange, position, ...props },
+    ref
+  ) => {
+    return (
+      <TextField
+        className={POSITION_TO_STYLE[position]}
+        classes={{ root: styles.letter }}
+        disabled={disabled}
+        id={id}
+        inputProps={{ maxLength: 1 }}
+        InputProps={{ disableUnderline: true }}
+        inputRef={ref}
+        ref={(element) => handleFocusChange(element, index)}
+        {...props}
+      />
+    );
+  }
+);
 
 export default LetterInput;
