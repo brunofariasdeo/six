@@ -55,6 +55,9 @@ const Word = ({ isCurrentGuess, onGuessSubmit }) => {
             disabled={!isCurrentGuess || isSubmitted}
             id={NUMBER_TO_POSITION[index + 1]}
             key={index}
+            onKeyPress={(event) =>
+              event.key === "Enter" && handleSubmit(onSubmit)()
+            }
             position={
               isSubmitted
                 ? letters[NUMBER_TO_POSITION[index + 1]]["position"]
@@ -65,9 +68,6 @@ const Word = ({ isCurrentGuess, onGuessSubmit }) => {
             {...register(NUMBER_TO_POSITION[index + 1])}
           />
         ))}
-        <Button type="submit" variant="contained" color="primary">
-          Submit
-        </Button>
       </form>
     </Grid>
   );
