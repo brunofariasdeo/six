@@ -4,6 +4,7 @@ import styles from "./styles.module.scss";
 
 const POSITION_TO_STYLE = {
   correct: styles.correct,
+  disabled: styles.disabled,
   incorrect: styles.incorrect,
   notFound: styles.notFound,
 };

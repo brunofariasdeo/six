@@ -13,7 +13,7 @@ const NUMBER_TO_POSITION = {
   6: "sixthLetter",
 };
 
-const Word = () => {
+const Word = ({ isCurrentGuess, onGuessSubmit }) => {
   const { register, handleSubmit } = useForm();
 
   const [letters, setLetters] = useState({});
@@ -36,6 +36,7 @@ const Word = () => {
 
     setIsSubmmited(true);
     setLetters(data);
+    onGuessSubmit();
   };
 
   return (
@@ -48,22 +49,24 @@ const Word = () => {
       direction="row"
       justifyContent="center"
     >
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form className={styles.wordForm} onSubmit={handleSubmit(onSubmit)}>
         {[...Array(6)].map((_, index) => (
           <LetterInput
-            disabled={isSubmitted}
+            disabled={!isCurrentGuess || isSubmitted}
             id={NUMBER_TO_POSITION[index + 1]}
             key={index}
             position={
               isSubmitted
                 ? letters[NUMBER_TO_POSITION[index + 1]]["position"]
-                : ""
+                : isCurrentGuess
+                ? ""
+                : "disabled"
             }
             {...register(NUMBER_TO_POSITION[index + 1])}
           />
         ))}
         <Button type="submit" variant="contained" color="primary">
-          Sign in
+          Submit
         </Button>
       </form>
     </Grid>
