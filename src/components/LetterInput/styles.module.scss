@@ -1,5 +1,5 @@
 .letter {
-  background-color: #939B9F;
+  background-color: #939b9f;
   border-radius: 5px;
   display: flex;
   align-items: center;
@@ -14,4 +14,16 @@
     text-align: center;
     text-transform: uppercase;
   }
+}
+
+.correct {
+  background-color: #66a060;
+}
+
+.incorrect {
+  background-color: #ceb02c;
+}
+
+.notFound {
+  background-color: #939b9f;
 }
