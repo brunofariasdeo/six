@@ -37,12 +37,25 @@ const Word = ({ isCurrentGuess, onGuessSubmit }) => {
     lettersRef.current[index] = element;
   };
 
-  const handleKeyPress = (event, index) => {
+  const handleKeyDown = (event) => {
+    if (event.key === "Backspace") {
+      setValue(NUMBER_TO_POSITION[currentIndex], "");
+
+      if (currentIndex !== 0) {
+        setCurrentIndex(currentIndex - 1);
+      }
+    }
+  };
+
+  const handleKeyPress = (event) => {
     if (event.key === "Enter") {
       handleSubmit(onSubmit)();
     } else {
-      setValue(NUMBER_TO_POSITION[index + 1], event.key);
-      setCurrentIndex(currentIndex + 1);
+      setValue(NUMBER_TO_POSITION[currentIndex + 1], event.key);
+
+      if (currentIndex !== 6) {
+        setCurrentIndex(currentIndex + 1);
+      }
     }
   };
 
@@ -90,7 +103,8 @@ const Word = ({ isCurrentGuess, onGuessSubmit }) => {
             id={NUMBER_TO_POSITION[index + 1]}
             index={index}
             key={NUMBER_TO_POSITION[index + 1]}
-            onKeyPress={(event) => handleKeyPress(event, index)}
+            onKeyDown={(event) => handleKeyDown(event)}
+            onKeyPress={(event) => handleKeyPress(event)}
             position={checkPosition(index)}
             {...register(NUMBER_TO_POSITION[index + 1])}
           />
