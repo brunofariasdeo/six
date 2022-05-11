@@ -14,11 +14,11 @@ const NUMBER_TO_POSITION = {
 };
 
 const Word = ({ isCurrentGuess, onGuessSubmit }) => {
-  const { register, handleSubmit } = useForm();
-
   const [currentIndex, setCurrentIndex] = useState(0);
   const [letters, setLetters] = useState({});
   const [isSubmitted, setIsSubmmited] = useState(false);
+
+  const { handleSubmit, register, setValue } = useForm();
   const lettersRef = useRef([]);
 
   const word = "abismo";
@@ -37,10 +37,11 @@ const Word = ({ isCurrentGuess, onGuessSubmit }) => {
     lettersRef.current[index] = element;
   };
 
-  const handleKeyPress = (event) => {
+  const handleKeyPress = (event, index) => {
     if (event.key === "Enter") {
       handleSubmit(onSubmit)();
     } else {
+      setValue(NUMBER_TO_POSITION[index + 1], event.key);
       setCurrentIndex(currentIndex + 1);
     }
   };
@@ -65,7 +66,9 @@ const Word = ({ isCurrentGuess, onGuessSubmit }) => {
 
   useEffect(() => {
     setTimeout(() => {
-      lettersRef.current[currentIndex].querySelector("input").focus();
+      if (currentIndex <= 5) {
+        lettersRef.current[currentIndex].querySelector("input").focus();
+      }
     }, 10);
   }, [currentIndex]);
 
