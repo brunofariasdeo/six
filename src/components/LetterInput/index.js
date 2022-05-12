@@ -1,5 +1,6 @@
 import { TextField } from "@material-ui/core";
 import { forwardRef } from "react";
+import clsx from "clsx";
 import styles from "./styles.module.scss";
 
 const POSITION_TO_STYLE = {
@@ -11,12 +12,24 @@ const POSITION_TO_STYLE = {
 
 const LetterInput = forwardRef(
   (
-    { disabled, handleFocusChange, id, index, onChange, position, ...props },
+    {
+      disabled,
+      focused,
+      handleFocusChange,
+      id,
+      index,
+      onChange,
+      position,
+      ...props
+    },
     ref
   ) => {
     return (
       <TextField
-        className={POSITION_TO_STYLE[position]}
+        className={clsx(
+          POSITION_TO_STYLE[position],
+          focused && !disabled && styles.focused
+        )}
         classes={{ root: styles.letter }}
         disabled={disabled}
         id={id}

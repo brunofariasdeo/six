@@ -99,6 +99,7 @@ const Word = ({ isCurrentGuess, onGuessSubmit }) => {
         {[...Array(6)].map((_, index) => (
           <LetterInput
             disabled={!isCurrentGuess || isSubmitted}
+            focused={currentIndex === index}
             handleFocusChange={handleFocusChange}
             id={NUMBER_TO_POSITION[index + 1]}
             index={index}

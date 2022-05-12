@@ -1,6 +1,7 @@
 .letter {
   background-color: #939b9f;
   border-radius: 5px;
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -31,4 +32,8 @@
 .disabled {
   background-color: #939b9f;
   opacity: 30%;
+}
+
+.focused {
+  border-bottom: 5px solid rgba(62, 73, 78, 0.9) !important;
 }
