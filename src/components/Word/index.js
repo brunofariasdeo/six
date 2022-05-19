@@ -1,8 +1,12 @@
-import { Grid } from "@material-ui/core";
+import { Grid, Snackbar } from "@material-ui/core";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import LetterInput from "../LetterInput";
 import styles from "./styles.module.scss";
+
+const ERROR_TO_MESSAGE = {
+  empty: "Not enough letters",
+};
 
 const NUMBER_TO_POSITION = {
   1: "firstLetter",
@@ -15,10 +19,12 @@ const NUMBER_TO_POSITION = {
 
 const Word = ({ isCurrentGuess, onGuessSubmit }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [letters, setLetters] = useState({});
+  const [error, setError] = useState("");
   const [isSubmitted, setIsSubmmited] = useState(false);
+  const [letters, setLetters] = useState({});
+  const [openToast, setOpenToast] = useState(false);
 
-  const { handleSubmit, register, setValue } = useForm();
+  const { getValues, handleSubmit, register, setValue } = useForm();
   const lettersRef = useRef([]);
 
   const word = "abismo";
@@ -31,6 +37,10 @@ const Word = ({ isCurrentGuess, onGuessSubmit }) => {
         return "disabled";
       }
     }
+  };
+
+  const handleCloseToast = () => {
+    setOpenToast(false);
   };
 
   const handleFocusChange = (element, index) => {
@@ -49,7 +59,17 @@ const Word = ({ isCurrentGuess, onGuessSubmit }) => {
 
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
+      const isEmpty = Object.values(getValues()).some(
+        (letter) => letter === "" || letter === undefined
+      );
+
+      if (isEmpty) {
+        setError("empty");
+        return;
+      }
+
       handleSubmit(onSubmit)();
+      setError("");
     } else {
       setValue(NUMBER_TO_POSITION[currentIndex + 1], event.key);
 
@@ -72,6 +92,7 @@ const Word = ({ isCurrentGuess, onGuessSubmit }) => {
       }
     });
 
+    setError("");
     setIsSubmmited(true);
     setLetters(data);
     onGuessSubmit();
@@ -85,6 +106,14 @@ const Word = ({ isCurrentGuess, onGuessSubmit }) => {
     }, 10);
   }, [currentIndex]);
 
+  useEffect(() => {
+    if (error) {
+      setOpenToast(true);
+    } else {
+      setOpenToast(false);
+    }
+  }, [error]);
+
   return (
     <Grid
       alignItems="center"
@@ -95,6 +124,13 @@ const Word = ({ isCurrentGuess, onGuessSubmit }) => {
       direction="row"
       justifyContent="center"
     >
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        autoHideDuration={5000}
+        message={ERROR_TO_MESSAGE[error]}
+        open={openToast}
+        onClose={handleCloseToast}
+      />
       <form className={styles.wordForm} onSubmit={handleSubmit(onSubmit)}>
         {[...Array(6)].map((_, index) => (
           <LetterInput
@@ -107,7 +143,7 @@ const Word = ({ isCurrentGuess, onGuessSubmit }) => {
             onKeyDown={(event) => handleKeyDown(event)}
             onKeyPress={(event) => handleKeyPress(event)}
             position={checkPosition(index)}
-            {...register(NUMBER_TO_POSITION[index + 1])}
+            {...register(NUMBER_TO_POSITION[index + 1], { required: true })}
           />
         ))}
       </form>
