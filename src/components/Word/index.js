@@ -2,10 +2,12 @@ import { Grid, Snackbar } from "@material-ui/core";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import LetterInput from "../LetterInput";
+import words from "../../data/words";
 import styles from "./styles.module.scss";
 
 const ERROR_TO_MESSAGE = {
   empty: "Not enough letters",
+  notFound: "Not in word list",
 };
 
 const NUMBER_TO_POSITION = {
@@ -58,7 +60,10 @@ const Word = ({ isCurrentGuess, onGuessSubmit }) => {
   };
 
   const handleKeyPress = (event) => {
+    setError("");
     if (event.key === "Enter") {
+      const wordTyped = Object.values(getValues()).join("");
+
       const isEmpty = Object.values(getValues()).some(
         (letter) => letter === "" || letter === undefined
       );
@@ -68,8 +73,12 @@ const Word = ({ isCurrentGuess, onGuessSubmit }) => {
         return;
       }
 
+      if (!words.includes(wordTyped)) {
+        setError("notFound");
+        return;
+      }
+
       handleSubmit(onSubmit)();
-      setError("");
     } else {
       setValue(NUMBER_TO_POSITION[currentIndex + 1], event.key);
 
@@ -92,7 +101,6 @@ const Word = ({ isCurrentGuess, onGuessSubmit }) => {
       }
     });
 
-    setError("");
     setIsSubmmited(true);
     setLetters(data);
     onGuessSubmit();
