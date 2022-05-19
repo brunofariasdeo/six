@@ -80,10 +80,17 @@ const Word = ({ isCurrentGuess, onGuessSubmit }) => {
 
       handleSubmit(onSubmit)();
     } else {
-      setValue(NUMBER_TO_POSITION[currentIndex + 1], event.key);
+      const regex = new RegExp("^[a-zA-Z\\s\u00C0-\u00FF]*$");
+      const isValidLetter = regex.test(event.key);
 
-      if (currentIndex !== 6) {
-        setCurrentIndex(currentIndex + 1);
+      if (isValidLetter) {
+        setValue(NUMBER_TO_POSITION[currentIndex + 1], event.key);
+
+        if (currentIndex !== 6) {
+          setCurrentIndex(currentIndex + 1);
+        }
+      } else {
+        event.preventDefault();
       }
     }
   };
